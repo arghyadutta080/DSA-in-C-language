@@ -100,6 +100,9 @@ int main()
     enque(4);
     display();
     deque();
+    enque(5);
+    enque(6);
+    enque(7);
     display();
     deque();
     display();
