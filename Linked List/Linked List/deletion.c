@@ -7,97 +7,172 @@ struct node
     struct node *next;
 };
 
-void traverseList(struct node *ptr)
+struct node *creatNode(struct node *head, int data)
 {
-    while (ptr != NULL)
+    struct node *newNode, *temp;
+
+    newNode = (struct node *)malloc(sizeof(struct node));
+    newNode->data = data;
+    newNode->next = NULL;
+
+    if (head == NULL)
     {
-        printf("%d ", ptr->data);
-        ptr = ptr->next;
+        head = newNode;
+        temp = newNode;
+    }
+    else
+    {
+        temp->next = newNode;
+        temp = newNode;
+    }
+
+    return head;
+}
+
+void traverseList(struct node *head)
+{
+    if (head == NULL)
+        printf("List is empty");
+
+    else
+    {
+        struct node *ptr = head;
+        while (ptr != NULL)
+        {
+            printf("%d ", ptr->data);
+            ptr = ptr->next;
+        }
     }
 }
 
-struct node *delFromBegin(struct node *ptr)
+struct node *delFromBegin(struct node *head)
 {
-    struct node *p = ptr;
-    ptr = ptr->next;
-    free(p);
-    return ptr;
+    if (head == NULL)
+        printf("List is empty");
+
+    else
+    {
+        struct node *p = head;
+        head = head->next;
+        free(p);
+        return head;
+    }
 }
 
-void delFromEnd(struct node *ptr)
+void delFromEnd(struct node *head)
 {
-    struct node *p = ptr;
-    struct node *q = p->next;
-    while (q->next != NULL)
+    if (head == NULL)
+        printf("List is empty");
+
+    else
     {
-        p = p->next;
-        q = q->next;
+        struct node *p = head;
+        struct node *q = p->next;
+        while (q->next != NULL)
+        {
+            p = p->next;
+            q = q->next;
+        }
+        p->next = q->next;
+        free(q);
     }
-    p->next = q->next;
-    free(q);
 }
 
-void delFromMiddle(struct node *ptr, int index)
+void delFromMiddle(struct node *head, int index)
 {
-    struct node *p = ptr;
-    struct node *q = p->next;
-    for (int i = 1; i < index; i++)
+    if (head == NULL)
+        printf("List is empty");
+
+    else
     {
-        p = p->next;
-        q = q->next;
+        struct node *p = head;
+        struct node *q = p->next;
+        for (int i = 1; i < index; i++)
+        {
+            p = p->next;
+            q = q->next;
+        }
+        p->next = q->next;
+        free(q);
     }
-    p->next = q->next;
-    free(q);
 }
 
 int main()
 {
-    struct node *head, *second, *third, *fourth, *fifth, *sixth;
-    head = (struct node *)malloc(sizeof(struct node));
-    second = (struct node *)malloc(sizeof(struct node));
-    third = (struct node *)malloc(sizeof(struct node));
-    fourth = (struct node *)malloc(sizeof(struct node));
-    fifth = (struct node *)malloc(sizeof(struct node));
-    sixth = (struct node *)malloc(sizeof(struct node));
+    struct node *head = NULL;
+    int select, choice;
 
-    head->data = 45;
-    head->next = second;
+    printf("First creat a Linkedlist ...\n");
 
-    second->data = 50;
-    second->next = third;
+    do
+    {
+        printf("Enter 1 to add nodes in Linkedlist and 0 to stop creating list\n");
+        scanf("%d", &select);
 
-    third->data = 55;
-    third->next = fourth;
+        if (select == 1)
+        {
+            int data;
+            printf("Enter number : ");
+            scanf("%d", &data);
+            head = creatNode(head, data);
+        }
 
-    fourth->data = 66;
-    fourth->next = fifth;
+        else if (select == 0)
+        {
+            printf("Created Linkedlist : \n");
+            traverseList(head);
+            printf("\n");
+            break;
+        }
 
-    fifth->data = 70;
-    fifth->next = sixth;
+    } while (1);
 
-    sixth->data = 77;
-    sixth->next = NULL;
+    while (1)
+    {
+        printf("Enter 1 to delete from Head, 2 to del from desired index value, 3 to del from end, 5 to exit\n");
+        scanf("%d", &choice);
 
-    printf("Original Linkedlist : \n");
-    traverseList(head);
-    printf("\n");
+        if (choice == 1)
+        {
+            head = delFromBegin(head);
+            printf("After delete from the beggining of Linkedlist : \n");
+            traverseList(head);
+            printf("\n");
+        }
 
-    struct node *begin = delFromBegin(head);
-    printf("After delete from the beggining of Linkedlist : \n");
-    traverseList(begin);
-    printf("\n");
+        else if (choice == 2)
+        {
+            int index, value;
+            printf("Enter index : ");
+            scanf("%d", &index);
 
-    int index = 2;
+            printf("Enter 1 if you want to del from given index, 0 to del previous index, 2 to del the next index\n");
+            scanf("%d", &value);
 
-    delFromMiddle(begin, index);
-    printf("After delete element from the index %d of Linkedlist : \n", index);
-    traverseList(begin);
-    printf("\n");
+            if (value == 1)
+                index = index + 0;
+            else if (value == 0)
+                index = index - 1;
+            else if (value == 2)
+                index = index + 1;
 
-    delFromEnd(begin);
-    printf("After delete from the end of Linkedlist : \n");
-    traverseList(begin);
-    printf("\n");
+            delFromMiddle(head, index);
+            printf("After delete element from the index %d of Linkedlist : \n", index);
+            traverseList(head);
+            printf("\n");
+        }
+
+        else if (choice == 3)
+        {
+            delFromEnd(head);
+            printf("After delete from the end of Linkedlist : \n");
+            traverseList(head);
+            printf("\n");
+        }
+
+        else if (choice == 5)
+            break;
+    }
 
     return 0;
 }
