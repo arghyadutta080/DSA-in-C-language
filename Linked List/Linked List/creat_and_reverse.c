@@ -29,6 +29,22 @@ struct node *creatNode(struct node *head, int data)
     return head;
 }
 
+struct node *reverseNode(struct node *head){
+    struct node *prev, *current, *next;
+    prev = NULL;
+    current = head;
+    next = NULL;
+    while (current != NULL)
+    {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+    head = prev;
+    return head;
+}
+
 void display(struct node *head)
 {
     struct node *ptr = head;
@@ -50,7 +66,7 @@ int main()
     int choice;
     do
     {
-        printf("Enter 1 to add nodes in Linkedlist, 0 to display and count elements and 5 to exit\n");
+        printf("Enter 1 to add nodes in Linkedlist, 0 to display and count elements, 2 to reverse list and 5 to exit\n");
         scanf("%d", &choice);
 
         if (choice == 1)
@@ -64,6 +80,11 @@ int main()
         else if (choice == 0)
         {
             display(head);
+        }
+
+        else if (choice  == 2)
+        {
+            head = reverseNode(head);
         }
 
         else if (choice == 5)
